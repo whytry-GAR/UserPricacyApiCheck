@@ -16,6 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <provider
+            android:name=".MultiprocessSharedPreferences"
+            android:authorities="com.wizard.userpricacyapicheck.provider"
+            android:exported="true" />
+
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="用Xposed做一些测试" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="53" />
     </application>
 
 </manifest>
