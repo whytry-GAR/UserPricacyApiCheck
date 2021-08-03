@@ -2,6 +2,7 @@ package com.wizard.userpricacyapicheck.hook;
 
 import android.util.Log;
 
+import com.wizard.userpricacyapicheck.ToastUtil;
 import com.wizard.userpricacyapicheck.hook.model.HookInfo;
 import de.robv.android.xposed.XC_MethodHook;
 
@@ -29,7 +30,6 @@ public abstract class HookDescribe implements IHookDescribe {
     }
 
 
-
     public void normalLog(String className, String methodName, String logTag) {
         try {
             throw new RuntimeException("打印" + className + "#" + methodName + "调用栈");
@@ -37,6 +37,9 @@ public abstract class HookDescribe implements IHookDescribe {
             Log.d(logTag, "\n\n\n-----------------------------------------------------------");
             Log.e(logTag, "beforeHookedMethod: ", e);
             Log.d(logTag, "-----------------------------------------------------------\n\n\n");
+            if (HookModule.needToast) {
+                ToastUtil.makeToast(HookModule.context, "调用了" + className + "#" + methodName, ToastUtil.LENGTH_SHORT);
+            }
         }
     }
 }

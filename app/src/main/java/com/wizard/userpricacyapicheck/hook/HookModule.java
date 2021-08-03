@@ -5,10 +5,12 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import com.wizard.userpricacyapicheck.Constants;
 import com.wizard.userpricacyapicheck.MultiprocessSharedPreferences;
 import com.wizard.userpricacyapicheck.ToastUtil;
 import com.wizard.userpricacyapicheck.hook.descripe.AccountManagerHook;
@@ -46,16 +48,12 @@ public class HookModule implements IXposedHookLoadPackage {
     public static final List<HookInfo> hookInfos = new ArrayList<>();
     public String hookPackage = "";
     public String hookPackageTAG = TAG;
-    public Context context;
+    public static Context context;
+    public static boolean needToast;
 
     @Override
     public void handleLoadPackage(LoadPackageParam lpp) {
-
         initContext(lpp);
-//        initHookPackageAndTAG();
-//        if (!TextUtils.isEmpty(hookPackage) && hookPackage.equals(lpp.packageName)) {
-//            hookWithPackageName(lpp, hookPackage, hookPackageTAG);
-//        }
     }
 
     private void initContext(LoadPackageParam lpp) {
@@ -65,11 +63,17 @@ public class HookModule implements IXposedHookLoadPackage {
                 super.afterHookedMethod(param);
                 context = (Context) param.args[0];
                 initHookPackageAndTAG(context);
+                String label = context != null ? String
+                    .valueOf(context.getPackageManager().getApplicationLabel(lpp.appInfo)) : "【包名获取失败】";
+                String tip = "包名不匹配，应用名为 = " + label + ",包名为" + lpp.packageName;
                 if (!TextUtils.isEmpty(hookPackage) && hookPackage.equals(lpp.packageName)) {
                     hookWithPackageName(lpp, hookPackage, hookPackageTAG);
-                    Log.d(TAG, "包名匹配，执行hook成功，当前应用包名为" + lpp.packageName);
-                } else {
-                    Log.d(TAG, "包名不匹配，当前应用包名为" + lpp.packageName);
+                    tip =
+                        "包名匹配，执行hook成功，应用名为=" + label + ",包名为" + lpp.packageName;
+                }
+                Log.d(TAG, tip);
+                if (needToast && context != null) {
+                    ToastUtil.makeToast(HookModule.context, tip, ToastUtil.LENGTH_SHORT);
                 }
             }
         });
@@ -82,10 +86,12 @@ public class HookModule implements IXposedHookLoadPackage {
             MultiprocessSharedPreferences.setAuthority("com.wizard.userpricacyapicheck.provider");
             SharedPreferences sharedPreferences = MultiprocessSharedPreferences
                 .getSharedPreferences(context, "com.wizard.userpricacyapicheck", MODE_PRIVATE);
-            hookPackage = sharedPreferences.getString("check_package_name", "");
+            hookPackage = sharedPreferences.getString(Constants.KEY_CHECK_PACKAGE_NAME, "");
+            needToast = sharedPreferences.getBoolean(Constants.KEY_NEED_SHOW_TOAST, false);
 //        hookPackageTAG = sharedPreferences.getString("check_package_tag", "HookModule");
             Log.d(TAG,
-                "initHookPackageAndTAG check_package_name=" + hookPackage + "  check_package_TAG = " + hookPackageTAG);
+                "initHookPackageAndTAG check_package_name=" + hookPackage + "  check_package_TAG = " + hookPackageTAG
+                    + " needToast =" + needToast);
         } else {
             Log.d(TAG, "获取上下文失败");
         }

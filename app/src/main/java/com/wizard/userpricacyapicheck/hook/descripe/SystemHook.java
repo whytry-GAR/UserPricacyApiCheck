@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.provider.Settings.Secure;
 import android.provider.Settings.System;
 import android.util.Log;
+import com.wizard.userpricacyapicheck.ToastUtil;
 import com.wizard.userpricacyapicheck.hook.HookDescribe;
+import com.wizard.userpricacyapicheck.hook.HookModule;
 import com.wizard.userpricacyapicheck.hook.model.HookInfo;
 import com.wizard.userpricacyapicheck.hook.model.MethodInfo;
 import de.robv.android.xposed.XC_MethodHook;
@@ -22,8 +24,7 @@ public class SystemHook extends HookDescribe {
     public HookInfo initHookMethod(HookInfo hookInfo) {
         //android_id
         hookInfo
-            .addMethodInfo(new MethodInfo("getString", ContentResolver.class.getName(), String.class.getName()))
-        ;
+            .addMethodInfo(new MethodInfo("getString", ContentResolver.class.getName(), String.class.getName()));
         return hookInfo;
     }
 
@@ -50,13 +51,18 @@ public class SystemHook extends HookDescribe {
             if (value instanceof String) {
                 if (Secure.ANDROID_ID.equals(value)) {
                     try {
+
                         throw new RuntimeException(
                             "打印" + className + "#" + param.method.getName() + "调用栈 - " + value);
                     } catch (Throwable e) {
                         Log.d(logTag, "\n\n\n-----------------------------------------------------------");
                         Log.e(logTag, "beforeHookedMethod: ", e);
                         Log.d(logTag, "-----------------------------------------------------------\n\n\n");
-
+                        if (HookModule.needToast) {
+                            ToastUtil.makeToast(HookModule.context,
+                                "调用了" + className + "#" + param.method.getName() + "调用栈 - " + value,
+                                ToastUtil.LENGTH_SHORT);
+                        }
                     }
                 } else {
                     String logMsg = "调用了" + className + "#" + param.method.getName() + "  -" + value;

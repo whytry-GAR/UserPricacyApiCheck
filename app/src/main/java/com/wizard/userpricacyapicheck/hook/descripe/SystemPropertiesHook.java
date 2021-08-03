@@ -1,7 +1,9 @@
 package com.wizard.userpricacyapicheck.hook.descripe;
 
 import android.util.Log;
+import com.wizard.userpricacyapicheck.ToastUtil;
 import com.wizard.userpricacyapicheck.hook.HookDescribe;
+import com.wizard.userpricacyapicheck.hook.HookModule;
 import com.wizard.userpricacyapicheck.hook.model.HookInfo;
 import com.wizard.userpricacyapicheck.hook.model.MethodInfo;
 import de.robv.android.xposed.XC_MethodHook;
@@ -35,13 +37,18 @@ public class SystemPropertiesHook extends HookDescribe {
                 if (value instanceof String) {
                     if ("no.such.thing".equals(value)) {
                         try {
+
                             throw new RuntimeException(
                                 "打印" + getClassName() + "#" + param.method.getName() + "调用栈 - " + value);
                         } catch (Throwable e) {
                             Log.d(logTag, "\n\n\n-----------------------------------------------------------");
                             Log.e(logTag, "beforeHookedMethod: ", e);
                             Log.d(logTag, "-----------------------------------------------------------\n\n\n");
-
+                            if (HookModule.needToast) {
+                                ToastUtil.makeToast(HookModule.context,
+                                    "调用了" + getClassName() + "#" + param.method.getName() + "调用栈 - " + value,
+                                    ToastUtil.LENGTH_SHORT);
+                            }
                         }
                     } else {
                         String logMsg = "调用了" + getClassName() + "#" + param.method.getName() + " - " + value;
