@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
 import com.wizard.userpricacyapicheck.MultiprocessSharedPreferences;
+import com.wizard.userpricacyapicheck.ToastUtil;
 import com.wizard.userpricacyapicheck.hook.descripe.AccountManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.ActivityManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.ApplicationPackageManagerHook;
@@ -42,11 +45,12 @@ public class HookModule implements IXposedHookLoadPackage {
     private static final String TAG = "HookModule";
     public static final List<HookInfo> hookInfos = new ArrayList<>();
     public String hookPackage = "";
-    public String hookPackageTAG = "";
+    public String hookPackageTAG = TAG;
+    public Context context;
 
     @Override
     public void handleLoadPackage(LoadPackageParam lpp) {
-        
+
         initContext(lpp);
 //        initHookPackageAndTAG();
 //        if (!TextUtils.isEmpty(hookPackage) && hookPackage.equals(lpp.packageName)) {
@@ -54,17 +58,18 @@ public class HookModule implements IXposedHookLoadPackage {
 //        }
     }
 
-    private void initContext( LoadPackageParam lpp) {
+    private void initContext(LoadPackageParam lpp) {
         XposedHelpers.findAndHookMethod(Application.class, "attach", Context.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
-                Context context = (Context) param.args[0];
-                Log.d(TAG,
-                    "initContext context=" + context);
+                context = (Context) param.args[0];
                 initHookPackageAndTAG(context);
                 if (!TextUtils.isEmpty(hookPackage) && hookPackage.equals(lpp.packageName)) {
                     hookWithPackageName(lpp, hookPackage, hookPackageTAG);
+                    Log.d(TAG, "包名匹配，执行hook成功，当前应用包名为" + lpp.packageName);
+                } else {
+                    Log.d(TAG, "包名不匹配，当前应用包名为" + lpp.packageName);
                 }
             }
         });
@@ -73,21 +78,23 @@ public class HookModule implements IXposedHookLoadPackage {
     private void initHookPackageAndTAG(Context context) {
         Log.d(TAG,
             "initHookPackageAndTAG context=" + context);
-        MultiprocessSharedPreferences.setAuthority("com.wizard.userpricacyapicheck.provider");
-        SharedPreferences sharedPreferences =  MultiprocessSharedPreferences.getSharedPreferences(context, "com.wizard.userpricacyapicheck", MODE_PRIVATE);
-        hookPackage = sharedPreferences.getString("check_package_name", "");
-        hookPackageTAG = sharedPreferences.getString("check_package_tag", "");
-        Log.d(TAG,
-            "initHookPackageAndTAG check_package_name=" + hookPackage + "  check_package_TAG = " + hookPackageTAG);
+        if (context != null) {
+            MultiprocessSharedPreferences.setAuthority("com.wizard.userpricacyapicheck.provider");
+            SharedPreferences sharedPreferences = MultiprocessSharedPreferences
+                .getSharedPreferences(context, "com.wizard.userpricacyapicheck", MODE_PRIVATE);
+            hookPackage = sharedPreferences.getString("check_package_name", "");
+//        hookPackageTAG = sharedPreferences.getString("check_package_tag", "HookModule");
+            Log.d(TAG,
+                "initHookPackageAndTAG check_package_name=" + hookPackage + "  check_package_TAG = " + hookPackageTAG);
+        } else {
+            Log.d(TAG, "获取上下文失败");
+        }
     }
 
 
+    private void hookWithPackageName(@NonNull LoadPackageParam lpp, @NonNull String packageName,
+        @NonNull String logTag) {
 
-
-    private void hookWithPackageName(LoadPackageParam lpp, String packageName, String logTag) {
-        if (TextUtils.isEmpty(packageName) || !packageName.equals(lpp.packageName)) {
-            return;
-        }
         initHookInfos(logTag);
         Log.d(logTag,
             "handleLoadPackage: packageName = " + lpp.packageName + ", processName = " + lpp.processName);

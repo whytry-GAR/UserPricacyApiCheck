@@ -46,7 +46,7 @@ public class SystemPropertiesHook extends HookDescribe {
                     } else {
                         String logMsg = "调用了" + getClassName() + "#" + param.method.getName() + " - " + value;
                         Log.d(logTag, "\n\n\n-----------------------------------------------------------");
-                        Log.e(logTag, logMsg);
+                        Log.i(logTag, logMsg);
                         Log.d(logTag, "-----------------------------------------------------------\n\n\n");
                     }
                 }

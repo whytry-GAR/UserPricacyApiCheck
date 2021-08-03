@@ -28,7 +28,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="用Xposed做一些测试" />
+            android:value="基于xposed的app合规检测模块，可通过填入包名检测多个app" />
         <meta-data
             android:name="xposedminversion"
             android:value="53" />
