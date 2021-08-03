@@ -1,0 +1,2 @@
+# UserPricacyApiCheck
+基于xposed的app合规检测模块，可通过填入包名检测多个app
