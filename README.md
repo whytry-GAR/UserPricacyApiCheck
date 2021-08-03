@@ -1,8 +1,11 @@
 # UserPricacyApiCheck
-基于xposed的app合规检测模块，可通过填入包名检测多个app
+基于xposed的app合规检测模块，可通过填入包名检测多个app，可通过toast提示或者通过 logcat中 以HookModule关键字过滤知悉调用
 
 
 ![image](https://user-images.githubusercontent.com/8263357/127980676-793d18d2-af11-4886-bebe-628dd119fa98.png)
+
+
+![image](https://user-images.githubusercontent.com/8263357/127988304-d86b4eea-5185-4a2e-977a-c3d2d60ee0b5.png)
 
 
 #已经处理的检测方法如下（如有遗漏欢迎提issue补充）
