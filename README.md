@@ -1,30 +1,40 @@
 # UserPricacyApiCheck
 基于xposed的app合规检测模块，可通过填入包名检测多个app
+![image](https://user-images.githubusercontent.com/8263357/127980676-793d18d2-af11-4886-bebe-628dd119fa98.png)
 
-已经处理的检测方法包括
+
+#已经处理的检测方法包括
+##### 账户
 android.accounts.AccountManager#getAccounts 
 android.accounts.AccountManager#getAccountsByType 
+##### 安装列表
 android.app.ActivityManager#getRunningAppProcesses 
 android.app.ApplicationPackageManager#getInstalledApplications 
 android.app.ApplicationPackageManager#getInstalledPackages 
 android.app.ApplicationPackageManager#getInstalledModules 
+##### 蓝牙信息
 android.bluetooth.le.BluetoothLeScanner#startScan 
+##### 设备序列号
 android.os.Build#getSerial 
+##### 位置信息
 android.location.LocationManager#getLastKnownLocation 
 android.location.LocationManager#getLastLocation 
 android.location.LocationManager#getCurrentLocation 
 android.location.LocationManager#getCurrentLocation 
-java.net.NetworkInterface#getHardwareAddress 
+##### 系统信息（android_id）
 android.provider.Settings$Secure#getString 
 android.provider.Settings$System#getString 
-android.hardware.SensorManager#registerListener 
-android.telephony.SubscriptionManager#getDefaultDataSubscriptionId 
-android.telephony.SubscriptionManager#getDefaultDataPhoneId 
-android.telephony.SubscriptionManager#getDefaultDataSubId 
 android.os.SystemProperties#get 
 android.os.SystemProperties#getInt 
 android.os.SystemProperties#getLong 
 android.os.SystemProperties#getBoolean 
+##### 重力感应
+android.hardware.SensorManager#registerListener 
+##### 流量卡相关id
+android.telephony.SubscriptionManager#getDefaultDataSubscriptionId 
+android.telephony.SubscriptionManager#getDefaultDataPhoneId 
+android.telephony.SubscriptionManager#getDefaultDataSubId 
+##### imei，imsi,meid,sim卡信息
 android.telephony.TelephonyManager#getImei 
 android.telephony.TelephonyManager#getImei 
 android.telephony.TelephonyManager#getDeviceId 
@@ -38,6 +48,8 @@ android.telephony.TelephonyManager#getSimSerialNumber
 android.telephony.TelephonyManager#getNetworkOperatorForPhone 
 android.telephony.TelephonyManager#getSimCountryIsoForPhone 
 android.telephony.TelephonyManager#getSimOperatorNameForPhone 
+##### MAC相关
+java.net.NetworkInterface#getHardwareAddress 
 android.net.wifi.WifiInfo#getMacAddress 
 android.net.wifi.WifiInfo#getIpAddress 
 android.net.wifi.WifiInfo#getSSID 
