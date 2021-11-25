@@ -17,6 +17,8 @@
 * android.app.ApplicationPackageManager#getInstalledApplications 
 * android.app.ApplicationPackageManager#getInstalledPackages 
 * android.app.ApplicationPackageManager#getInstalledModules 
+* android.app.ApplicationPackageManager#getPackagesForUid
+* android.app.ApplicationPackageManager#queryIntentActivities
 ##### 蓝牙信息
 * android.bluetooth.le.BluetoothLeScanner#startScan 
 ##### 设备序列号
