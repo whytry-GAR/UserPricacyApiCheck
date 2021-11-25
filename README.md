@@ -63,3 +63,6 @@
 * android.net.wifi.WifiInfo#getBSSID 
 * android.net.wifi.WifiManager#getScanResults 
 * android.net.wifi.WifiManager#getConnectionInfo
+##### ip相关
+* java.net.Inet4Address#getHostAddress
+* java.net.Inet6Address#getHostAddress
