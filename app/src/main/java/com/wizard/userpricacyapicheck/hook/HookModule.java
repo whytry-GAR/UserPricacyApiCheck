@@ -5,10 +5,8 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.wizard.userpricacyapicheck.Constants;
 import com.wizard.userpricacyapicheck.MultiprocessSharedPreferences;
@@ -18,6 +16,8 @@ import com.wizard.userpricacyapicheck.hook.descripe.ActivityManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.ApplicationPackageManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.BluetoothLeScannerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.BuildHook;
+import com.wizard.userpricacyapicheck.hook.descripe.Inet4AddressHook;
+import com.wizard.userpricacyapicheck.hook.descripe.Inet6AddressHook;
 import com.wizard.userpricacyapicheck.hook.descripe.LocationManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.NetworkInterfaceHook;
 import com.wizard.userpricacyapicheck.hook.descripe.SecureHook;
@@ -115,6 +115,8 @@ public class HookModule implements IXposedHookLoadPackage {
 
     public static void initHookInfos(String logTag) {
         hookInfos.add(new AccountManagerHook().build(logTag));
+        hookInfos.add(new Inet4AddressHook().build(logTag));
+        hookInfos.add(new Inet6AddressHook().build(logTag));
         hookInfos.add(new ActivityManagerHook().build(logTag));
         hookInfos.add(new ApplicationPackageManagerHook().build(logTag));
         hookInfos.add(new BluetoothLeScannerHook().build(logTag));
