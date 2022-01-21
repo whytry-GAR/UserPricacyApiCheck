@@ -16,8 +16,11 @@ import com.wizard.userpricacyapicheck.hook.descripe.ActivityManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.ApplicationPackageManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.BluetoothLeScannerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.BuildHook;
+import com.wizard.userpricacyapicheck.hook.descripe.ContextCompatHook;
+import com.wizard.userpricacyapicheck.hook.descripe.EnvironmentHook;
 import com.wizard.userpricacyapicheck.hook.descripe.Inet4AddressHook;
 import com.wizard.userpricacyapicheck.hook.descripe.Inet6AddressHook;
+import com.wizard.userpricacyapicheck.hook.descripe.InetAddressHook;
 import com.wizard.userpricacyapicheck.hook.descripe.LocationManagerHook;
 import com.wizard.userpricacyapicheck.hook.descripe.NetworkInterfaceHook;
 import com.wizard.userpricacyapicheck.hook.descripe.SecureHook;
@@ -131,6 +134,10 @@ public class HookModule implements IXposedHookLoadPackage {
         hookInfos.add(new TelephonyManagerHook().build(logTag));
         hookInfos.add(new WifiInfoHook().build(logTag));
         hookInfos.add(new WifiManagerHook().build(logTag));
+        hookInfos.add(new EnvironmentHook().build(logTag));
+        hookInfos.add(new InetAddressHook().build(logTag));
+//        hookInfos.add(new ContextHook().build(logTag));
+        hookInfos.add(new ContextCompatHook().build(logTag));
     }
 
     private void doHook(String logTag, LoadPackageParam lpp, String className, String methodName,

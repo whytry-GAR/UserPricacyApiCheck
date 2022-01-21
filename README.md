@@ -66,3 +66,12 @@
 ##### ip相关
 * java.net.Inet4Address#getHostAddress
 * java.net.Inet6Address#getHostAddress
+* java.net.InetAddressHook#getHostAddress
+##### 文件存储相关
+* ContextWrapperHook#getExternalFilesDir
+* ContextWrapperHook#getExternalFilesDirs
+* EnvironmentHook#getExternalStorageDirectory
+##### 权限判断相关
+* ContextCompatHook#checkSelfPermission
+* ContextWrapperHook#checkPermission
+* ContextWrapperHook#checkSelfPermission
